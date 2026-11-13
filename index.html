@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ProofPost AI · HKEYA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FBF3EA;--card:#fff;--ink:#3A1220;--mut:#7B5B64;--rose:#E98CA0;--rs:#F9DDE4;--wine:#6D1A36;--sky:#D6E9F6;--line:#EBD8D0;--side:#6D1A36;--btn:#6D1A36;--onbtn:#fff;
+--vf:#1F6B49;--vb:#DDF2E7;--rf:#8A5A00;--rb:#FCEFCF;--uf:#A3201A;--ub:#FBDDDA;--fh:'Bricolage Grotesque',Georgia,serif;--fb:'Figtree',system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#22101A;--card:#321A25;--ink:#F8E9EC;--mut:#CBA9B1;--rs:#4A2432;--sky:#1F3544;--line:#4A2B37;--side:#4A1228;--btn:#E98CA0;--onbtn:#2A0E18;--vb:#16382A;--vf:#8FE0B8;--rb:#3F3112;--rf:#F2CB75;--ub:#4A1A1A;--uf:#FFA9A1}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--fb);display:flex;min-height:100vh}
+h1,h2,h3{font-family:var(--fh);margin:0;line-height:1.15}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.side{width:250px;background:var(--side);color:#fff;padding:28px 20px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh;flex:none}
+.logo{font-family:var(--fh);font-size:30px;font-weight:700;letter-spacing:.04em}
+.logo small{display:block;font:500 14px var(--fb);letter-spacing:0;color:var(--rs);margin-top:2px}
+nav{display:flex;flex-direction:column;gap:8px}
+nav button{background:transparent;border:0;color:#fff;text-align:left;padding:12px 14px;border-radius:14px;cursor:pointer;font-weight:500}
+nav button[aria-current=true]{background:var(--rs);color:var(--wine)}
+.note{margin-top:auto;font-size:13px;color:var(--rs);background:rgba(255,255,255,.08);padding:12px;border-radius:14px}
+main{flex:1;min-width:0;padding:32px clamp(16px,4vw,48px) 56px;max-width:1100px}
+.view{display:none}.view.on{display:block}
+.head{margin-bottom:22px}.head h1{font-size:clamp(26px,4vw,38px);color:var(--wine)}
+.head p{color:var(--mut);margin:6px 0 0;max-width:62ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:8px 16px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--rose);border-color:var(--rose);color:#2A0E18;font-weight:600}
+.chip.new{background:var(--sky);border-style:dashed}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.full{grid-column:1/-1}
+label{display:block;font-weight:600;font-size:14px;margin-bottom:5px}
+.hint{font-weight:400;color:var(--mut);font-size:13px}
+input,select,textarea{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+textarea{resize:vertical;min-height:84px}
+.meter{display:flex;align-items:center;gap:12px;margin:0 0 18px;font-size:14px;color:var(--mut)}
+.bar{flex:1;height:10px;background:var(--rs);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--wine);width:0;transition:width .3s}
+.src{display:grid;grid-template-columns:1.2fr .8fr 2fr auto;gap:8px;align-items:start;margin-bottom:10px;padding:12px;background:var(--sky);border-radius:14px}
+.btn{background:var(--btn);color:var(--onbtn);border:0;border-radius:99px;padding:11px 22px;font-weight:600;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.sm{padding:6px 14px;font-size:14px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ctl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 14px}
+.tile{border-radius:18px;padding:14px 18px}.tile b{font:700 34px var(--fh);display:block}
+.t-v,.badge.v,mark.v{background:var(--vb);color:var(--vf)}.t-r,.badge.r,mark.r{background:var(--rb);color:var(--rf)}.t-u,.badge.u,mark.u{background:var(--ub);color:var(--uf)}
+.ann{white-space:pre-wrap;line-height:1.9;background:var(--bg);border-radius:14px;padding:16px}
+mark{border-radius:6px;padding:2px 4px;cursor:pointer;font-weight:600;border-bottom:2px solid currentColor}
+.cl{border-left:7px solid;margin-top:14px;display:grid;gap:8px}
+.cl.v{border-color:var(--vf)}.cl.r{border-color:var(--rf)}.cl.u{border-color:var(--uf)}
+.badge{display:inline-block;border-radius:99px;padding:3px 12px;font-weight:600;font-size:14px}
+.cl q{font-weight:600}.cl p{margin:0}.lbl{font-weight:600}
+.safe{background:var(--rs);border-radius:12px;padding:10px 14px}
+.pub{background:var(--sky);margin-top:18px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--wine);color:#fff;padding:12px 22px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;text-align:center;max-width:92vw}
+.toast.on{opacity:1}
+@media(max-width:820px){body{flex-direction:column}.side{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap;align-items:center;padding:14px 16px;gap:10px}
+.note{display:none}nav{flex-direction:row;width:100%}nav button{flex:1;text-align:center}.grid,.ctl,.src{grid-template-columns:1fr}.tiles{gap:8px}.tile{padding:10px 12px}}
+</style>
+</head>
+<body>
+<aside class="side">
+ <div class="logo">HKEYA<small>ProofPost AI</small></div>
+ <nav aria-label="Navigation">
+  <button data-v="passport" aria-current="true">Product Evidence Passport</button>
+  <button data-v="verify" aria-current="false">AI Content Verification</button>
+ </nav>
+ <div class="note">Prototype de démonstration. Un contenu « Verified » est soutenu par les sources enregistrées, pas certifié. Une validation humaine reste requise avant toute publication.</div>
+</aside>
+<main>
+<section id="v-passport" class="view on">
+ <div class="head"><h1>Product Evidence Passport</h1><p>Rassemblez ici tout ce que vous pouvez prouver sur un produit. L’outil de vérification s’appuie uniquement sur ces informations.</p></div>
+ <div class="chips" id="chips"></div>
+ <div class="card">
+  <div class="meter"><span id="pct">0 %</span><div class="bar"><i id="barfill"></i></div><span>passeport complété</span></div>
+  <div class="grid">
+   <div><label for="f-name">Nom du produit</label><input id="f-name"></div>
+   <div><label for="f-volume">Volume <span class="hint">(ex. 8 ml)</span></label><input id="f-volume"></div>
+   <div class="full"><label for="f-description">Description</label><textarea id="f-description"></textarea></div>
+   <div class="full"><label for="f-composition">Composition</label><textarea id="f-composition"></textarea></div>
+   <div class="full"><label for="f-color">Couleur et caractéristiques</label><textarea id="f-color"></textarea></div>
+   <div class="full"><label for="f-allowed">Affirmations marketing autorisées <span class="hint">(une par ligne)</span></label><textarea id="f-allowed" rows="5"></textarea></div>
+   <div class="full"><label>Documents ou sources justificatives</label><div id="srcs"></div><button class="btn alt sm" id="addsrc" type="button">Ajouter une source</button></div>
+  </div>
+  <p class="hint" style="margin:16px 0 0">Les modifications sont enregistrées automatiquement dans cette session.</p>
+ </div>
+</section>
+
+<section id="v-verify" class="view">
+ <div class="head"><h1>AI Content Verification</h1><p>Générez ou collez un texte marketing. Chaque affirmation est comparée au passeport du produit choisi.</p></div>
+ <div class="card">
+  <div class="ctl">
+   <div><label for="v-prod">Produit</label><select id="v-prod"></select></div>
+   <div><label for="v-type">Type de contenu</label><select id="v-type"><option value="caption">Caption Instagram</option><option value="desc">Description produit</option></select></div>
+   <div><label for="v-amb">Ton du texte généré</label><select id="v-amb"><option value="0">Prudent</option><option value="1" selected>Dynamique</option><option value="2">Très promotionnel</option></select></div>
+  </div>
+  <div class="row" style="margin-bottom:12px"><button class="btn" id="gen" type="button">Générer le contenu</button><span class="hint">Vous pouvez aussi modifier ou coller votre propre texte ci-dessous.</span></div>
+  <label for="v-text">Texte à vérifier</label>
+  <textarea id="v-text" rows="7"></textarea>
+  <div class="row" style="margin-top:12px"><button class="btn" id="check" type="button">Vérifier les affirmations</button></div>
+ </div>
+ <div id="res" aria-live="polite"></div>
+</section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const lines=s=>(s||'').split('\n').map(x=>x.trim()).filter(Boolean);
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2800)};
+
+/* ---------- Données ---------- */
+let P=[{id:1,name:'Gloss Béchira',volume:'8 ml',
+description:'Gloss à l’effet miroir de la marque tunisienne HKEYA, pensé pour un quotidien lumineux et féminin. Le nom « Béchira » évoque la bonne nouvelle.',
+composition:'Huile de ricin (Ricinus Communis Seed Oil), Huile de jojoba (Simmondsia Chinensis Seed Oil), Acétate de tocophéryle (vitamine E), Polybutène, Mica, Parfum (vanille), CI 77891, CI 77491',
+color:'Rose pêche translucide, finition brillante effet miroir. Applicateur doux, tube de 8 ml.',
+allowed:'Finition brillante effet miroir\nTexture non collante\nEnrichi en huile de jojoba et vitamine E\nFabriqué en Tunisie\nHydratation immédiate des lèvres\nTenue confortable',
+sources:[
+{title:'Fiche technique et INCI fournisseur',type:'Fiche technique',note:'Liste INCI complète : huile de ricin, huile de jojoba, vitamine E (acétate de tocophéryle), mica, parfum vanille.'},
+{title:'Test d’usage interne, 20 testeuses',type:'Rapport de test',note:'Texture jugée non collante par 18 testeuses sur 20. Finition brillante effet miroir observée.'},
+{title:'Bon de production atelier de Sousse',type:'Fiche technique',note:'Produit fabriqué en Tunisie, lot 2025-04.'},
+{title:'Attestation fournisseur (brouillon)',type:'Certificat / attestation',note:'Formule déclarée sans ingrédient d’origine animale. Certification vegan non obtenue à ce jour.'}]}];
+let cur=1,nid=2;const prod=()=>P.find(p=>p.id===cur);
+const ING=[['huile de jojoba',/jojoba/i],['vitamine E',/vitamine e\b|tocoph/i],['beurre de karité',/karit[ée]/i],['huile de ricin',/ricin/i],['huile d’argan',/argan/i],['acide hyaluronique',/hyaluron/i],['miel',/(?<![a-zà-ÿ])miel/i],['cire d’abeille',/cire d['’]abeille|beeswax/i],['aloe vera',/alo[eé]/i],['huile d’amande',/amande/i],['vanille',/vanille/i]];
+const ingList=p=>{const f=ING.filter(i=>i[1].test(p.composition)).map(i=>i[0]);return f.length>1?f.slice(0,-1).join(', ')+' et '+f.slice(-1):f[0]||''};
+
+/* ---------- Règles de détection ---------- */
+const CON=[
+{id:'vegan',re:/v[ée]g[ae]n/i,safe:(p,e)=>e.src?'Formule déclarée sans ingrédient d’origine animale':'Une formule pensée avec soin'},
+{id:'naturel',re:/naturel/i,safe:p=>'Formulé avec '+(ingList(p)||'les ingrédients listés dans la composition')},
+{id:'hydrat',re:/hydrat/i,safe:()=>'Une sensation de confort sur les lèvres'},
+{id:'tenue',re:/(?<![a-zà-ÿ])tenue|(?<![a-zà-ÿ])tient(?![a-zà-ÿ])|24 ?h|toute la journ[ée]e|s['’]efface/i,strict:/24 ?h|toute la journ[ée]e|longue/i,safe:()=>'Un gloss confortable à porter au quotidien'},
+{id:'repulp',re:/repulp|plump|l[èe]vres (plus )?(pulpeuses|charnues)|volume des l[èe]vres/i,safe:()=>'Un fini lumineux qui sublime vos lèvres'},
+{id:'collant',re:/collant/i,safe:()=>'Une texture pensée pour le confort'},
+{id:'brillance',re:/brillan|effet miroir|glossy|miroir/i,safe:()=>'Une finition brillante'},
+{id:'made',re:/fabriqu[ée]e? en tunisie|made in|produit en tunisie|fabrication tunisienne/i,safe:()=>'Une marque tunisienne'},
+{id:'cruelty',re:/cruelty|non test[ée]|jamais test[ée]|sans cruaut[ée]/i,safe:()=>'Un gloss pensé pour votre quotidien'},
+{id:'derm',re:/dermatolog|hypoallerg|sans allerg|peaux sensibles/i,safe:()=>'Une texture pensée pour le confort'},
+{id:'medical',re:/r[ée]par|gu[ée]ri|soigne|cicatri|anti-?[âa]ge|collag[èe]ne|(?<![a-zà-ÿ])rides|th[ée]rapeut/i,warn:'Les allégations de soin ou de réparation sont particulièrement sensibles en cosmétique.',safe:()=>'Un gloss qui sublime vos lèvres'},
+{id:'spf',re:/spf|protection solaire|anti-?uv|prot[èe]ge du soleil/i,warn:'Une protection solaire exige une preuve spécifique.',safe:()=>'Un gloss qui sublime vos lèvres'},
+{id:'sans',re:/sans (parab[èe]nes?|silicones?|alcool|paraben)/i,safe:()=>'Une texture pensée pour le confort'},
+{id:'super',re:/meilleur|\bn[°o] ?1\b|num[ée]ro 1|#1|le plus |r[ée]volutionn|miracle|incomparable|jamais vu/i,warn:'Les superlatifs et comparaisons demandent une étude comparative.',safe:p=>'Un gloss '+((p.color||'rose').split(/[,.\n]/)[0].toLowerCase())+' signé HKEYA'},
+{id:'vol',kind:'vol',re:/(\d+[.,]?\d*)\s?ml/i},
+{id:'col',kind:'col',re:/(?<![a-zà-ÿ])(rose|p[êe]che|nude|translucide|bordeaux|rouge|nacr[ée]e?|mat)(?![a-zà-ÿ])/i}
+];
+
+function analyze(text,p){
+ const out=[],rs=/[^.!?\n]+[.!?…]*/g;let m;
+ while((m=rs.exec(text))){
+  const s=m[0],sb=m.index;if(!s.trim())continue;
+  const base={sStart:sb,sEnd:sb+s.length,sent:s.trim()};
+  for(const c of CON){
+   const ms=[...s.matchAll(new RegExp(c.re.source,'gi'))];if(!ms.length)continue;
+   if(c.kind==='vol')ms.forEach(x=>out.push({...base,c,kind:'vol',snip:x[0],start:sb+x.index,end:sb+x.index+x[0].length,num:parseFloat(x[1].replace(',','.'))}));
+   else if(c.kind==='col')out.push({...base,c,kind:'col',snip:ms.map(x=>x[0]).join(', '),start:sb+ms[0].index,end:sb+ms[0].index+ms[0][0].length,words:[...new Set(ms.map(x=>x[0].toLowerCase()))]});
+   else out.push({...base,c,snip:ms[0][0],start:sb+ms[0].index,end:sb+ms[0].index+ms[0][0].length});
+  }
+  for(const [n,r] of ING){const x=s.match(r);if(x)out.push({...base,kind:'ing',ing:[n,r],snip:x[0],start:sb+x.index,end:sb+x.index+x[0].length});}
+ }
+ return out.map(cl=>({...cl,...judge(cl,p)}));
+}
+const label={vegan:'Vegan',naturel:'Naturel',hydrat:'Hydratation',tenue:'Tenue',repulp:'Effet repulpant',collant:'Texture',brillance:'Brillance',made:'Origine de fabrication',cruelty:'Cruelty-free',derm:'Tolérance cutanée',medical:'Allégation de soin',spf:'Protection solaire',sans:'Formule « sans »',super:'Superlatif',vol:'Volume',col:'Couleur'};
+const UNS_TIP='Pour utiliser cette affirmation, ajoutez-la aux affirmations autorisées et joignez un document justificatif dans le passeport.';
+function judge(cl,p){
+ const al=lines(p.allowed),src=p.sources||[];
+ if(cl.kind==='ing'){
+  const ok=cl.ing[1].test(p.composition);
+  return ok?{st:'v',tag:'Ingrédient',why:'Cet ingrédient figure dans la composition enregistrée.',ev:'Composition du passeport'}
+  :{st:'u',tag:'Ingrédient',why:'Cet ingrédient est absent de la composition enregistrée.',safe:'Une formule détaillée dans la liste d’ingrédients',tip:'Retirez la mention, ou corrigez la composition si elle est incomplète.'};
+ }
+ if(cl.kind==='vol'){
+  const n=parseFloat((p.volume||'').replace(',','.'));
+  return n===cl.num?{st:'v',tag:'Volume',why:'Le volume correspond à celui du passeport.',ev:'Volume : '+p.volume}
+  :{st:'u',tag:'Volume',why:`Le volume indiqué (${cl.num} ml) ne correspond pas au passeport (${p.volume||'non renseigné'}).`,safe:p.volume?'Disponible en '+p.volume:'Disponible en plusieurs formats',tip:'Corrigez le texte ou le passeport.'};
+ }
+ if(cl.kind==='col'){
+  const ref=((p.color||'')+' '+(p.description||'')).toLowerCase();
+  const miss=cl.words.filter(w=>!ref.includes(w.replace(/e$/,'')));
+  return !miss.length?{st:'v',tag:'Couleur',why:'La teinte décrite correspond aux caractéristiques enregistrées.',ev:'Couleur et caractéristiques du passeport'}
+  :{st:'u',tag:'Couleur',why:`« ${miss.join(', ')} » n’apparaît pas dans la couleur enregistrée (${(p.color||'').split(/[.\n]/)[0]||'non renseignée'}).`,safe:'Une teinte '+((p.color||'rose').split(/[,.\n]/)[0].toLowerCase()),tip:'Utilisez la teinte du passeport.'};
+ }
+ const c=cl.c,sOn=c.strict&&c.strict.test(cl.sent);
+ const okT=t=>c.re.test(t)&&(!sOn||c.strict.test(t));
+ const aBase=al.filter(l=>c.re.test(l)),aHit=al.filter(okT);
+ const sBase=src.filter(s=>c.re.test(s.title+' '+s.note)),sHit=src.filter(s=>okT(s.title+' '+s.note));
+ const info=c.re.test(p.description||'');
+ const e={src:sBase[0]},safe=c.safe(p,e),tag=label[c.id],w=c.warn?' '+c.warn:'';
+ if(sOn&&!aHit.length&&!sHit.length)return{st:'u',tag,why:(aBase.length?`La fiche n’autorise que « ${aBase[0]} », et aucune preuve ne soutient une formulation aussi forte.`:'Formulation précise ou absolue sans aucune preuve enregistrée.')+w,safe,tip:UNS_TIP};
+ if(aHit.length&&sHit.length)return{st:'v',tag,why:`Affirmation autorisée dans la fiche et appuyée par « ${sHit[0].title} ».`,ev:'Autorisée : « '+aHit[0]+' » · Source : '+sHit[0].title};
+ if(aHit.length)return{st:'r',tag,why:`Autorisée dans la fiche (« ${aHit[0]} »), mais aucun document enregistré ne la prouve. Une personne doit retrouver la preuve.`,safe,tip:'Ajoutez un document justificatif pour la faire passer en Verified.'};
+ if(sHit.length)return{st:'r',tag,why:`Un document (« ${sHit[0].title} ») la mentionne, mais elle n’est pas dans les affirmations autorisées. Une personne doit décider si elle peut être utilisée.`+w,safe,tip:'Si la preuve est suffisante, ajoutez l’affirmation aux affirmations autorisées.'};
+ if(info)return{st:'r',tag,why:'Elle apparaît dans la description du produit, sans preuve ni autorisation explicite.'+w,safe,tip:UNS_TIP};
+ return{st:'u',tag,why:'Aucune affirmation autorisée, aucun document ni aucune information du passeport ne la soutient.'+w,safe,tip:UNS_TIP};
+}
+
+/* ---------- Génération (modèles fictifs) ---------- */
+function generate(p,type,amb){
+ const al=lines(p.allowed).map(l=>l.replace(/[.\s]+$/,'')),n=p.name||'ce produit';
+ const base=al.filter(l=>/brillan|collant|enrichi|fabriqu/i.test(l)).slice(0,3);
+ const col=(p.color||'').split(/[.\n]/)[0];
+ const x=[['Hydrate vos lèvres toute la journée','Un effet repulpant instantané'],['Le meilleur gloss de Tunisie','100 % naturel et vegan','Tenue 24h','Répare et protège vos lèvres']][amb-1]||[];
+ const facts=base.concat(col?['Teinte '+col.toLowerCase()]:[]).concat(amb?x:[]);
+ if(type==='caption')return `Nouveau chez HKEYA : ${n} 💗\n${facts.join('. ')}.\nDisponible en ${p.volume||'8 ml'}. #HKEYA #LipGloss`;
+ return `${n} est un lip gloss signé HKEYA. ${facts.join('. ')}. Contenance : ${p.volume||'8 ml'}.`;
+}
+
+/* ---------- Vues ---------- */
+$$('nav button').forEach(b=>b.onclick=()=>{$$('nav button').forEach(x=>x.setAttribute('aria-current',x===b));$$('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));if(b.dataset.v==='verify')fillSelect()});
+
+/* ---------- Passeport ---------- */
+const F=['name','volume','description','composition','color','allowed'];
+function chips(){const c=$('#chips');c.innerHTML=P.map(p=>`<button class="chip" data-id="${p.id}" aria-pressed="${p.id===cur}">${esc(p.name||'Sans nom')}</button>`).join('')+'<button class="chip new" id="newp">+ Nouveau produit</button>';
+ $$('.chip[data-id]').forEach(b=>b.onclick=()=>{cur=+b.dataset.id;loadForm()});
+ $('#newp').onclick=()=>{P.push({id:nid,name:'',volume:'',description:'',composition:'',color:'',allowed:'',sources:[]});cur=nid++;loadForm();$('#f-name').focus()}}
+function loadForm(){const p=prod();F.forEach(k=>$('#f-'+k).value=p[k]);chips();srcs();meter()}
+function meter(){const p=prod();const n=F.filter(k=>(p[k]||'').trim()).length+(p.sources.length?1:0);const pc=Math.round(n/7*100);$('#pct').textContent=pc+' %';$('#barfill').style.width=pc+'%'}
+F.forEach(k=>$('#f-'+k).addEventListener('input',e=>{prod()[k]=e.target.value;meter();if(k==='name')chips()}));
+function srcs(){const p=prod(),T=['Fiche technique','Rapport de test','Certificat / attestation','Autre'];
+ $('#srcs').innerHTML=p.sources.map((s,i)=>`<div class="src"><input aria-label="Titre du document" placeholder="Titre du document" data-i="${i}" data-k="title" value="${esc(s.title)}"><select aria-label="Type" data-i="${i}" data-k="type">${T.map(t=>`<option${t===s.type?' selected':''}>${t}</option>`).join('')}</select><textarea aria-label="Ce que le document prouve" placeholder="Ce que le document prouve (ex. texture non collante, test sur 20 testeuses)" rows="2" data-i="${i}" data-k="note">${esc(s.note)}</textarea><button class="btn alt sm" data-del="${i}" type="button" aria-label="Supprimer la source">Retirer</button></div>`).join('')||'<p class="hint">Aucune source enregistrée.</p>';
+ $$('#srcs [data-k]').forEach(el=>el.addEventListener('input',e=>{p.sources[+el.dataset.i][el.dataset.k]=e.target.value}));
+ $$('#srcs [data-del]').forEach(b=>b.onclick=()=>{p.sources.splice(+b.dataset.del,1);srcs();meter()})}
+$('#addsrc').onclick=()=>{prod().sources.push({title:'',type:'Fiche technique',note:''});srcs();meter()};
+
+/* ---------- Vérification ---------- */
+function fillSelect(){const s=$('#v-prod'),v=s.value||cur;s.innerHTML=P.map(p=>`<option value="${p.id}">${esc(p.name||'Sans nom')}</option>`).join('');s.value=P.some(p=>p.id==v)?v:cur}
+$('#gen').onclick=()=>{const p=P.find(x=>x.id==$('#v-prod').value);$('#v-text').value=generate(p,$('#v-type').value,+$('#v-amb').value);toast('Contenu généré. Lancez la vérification.');$('#res').innerHTML=''};
+$('#check').onclick=run;
+const ST={v:['Verified','✓'],r:['Needs Review','!'],u:['Unsupported','✕']};
+function run(){
+ const text=$('#v-text').value,p=P.find(x=>x.id==$('#v-prod').value),R=$('#res');
+ if(!text.trim()){toast('Générez ou collez un texte avant de vérifier.');return}
+ const cl=analyze(text,p);window.CL=cl;
+ if(!cl.length){R.innerHTML='<div class="card" style="margin-top:20px">Aucune affirmation détectée par les règles de ce prototype. Une relecture humaine reste nécessaire.</div>';return}
+ const cnt={v:0,r:0,u:0};cl.forEach(c=>cnt[c.st]++);
+ const sorted=[...cl].sort((a,b)=>a.start-b.start);let html='',pos=0;
+ sorted.forEach(c=>{if(c.start<pos)return;html+=esc(text.slice(pos,c.start))+`<mark class="${c.st}" data-c="${cl.indexOf(c)}" tabindex="0">${esc(text.slice(c.start,c.end))}</mark>`;pos=c.end});html+=esc(text.slice(pos));
+ const cards=cl.map((c,i)=>`<article class="card cl ${c.st}" id="cl${i}"><div class="row"><span class="badge ${c.st}">${ST[c.st][1]} ${ST[c.st][0]}</span><span class="hint">${esc(c.tag)}</span></div>
+ <p>Affirmation détectée : <q>${esc(c.snip)}</q></p><p class="hint">Dans : « ${esc(c.sent)} »</p>
+ <p><span class="lbl">Pourquoi ce statut.</span> ${esc(c.why)}</p>
+ ${c.ev?`<p><span class="lbl">Preuve.</span> ${esc(c.ev)}</p>`:''}
+ ${c.safe?`<div class="safe"><span class="lbl">Reformulation plus sûre.</span> « ${esc(c.safe)} »<br><span class="hint">${esc(c.tip)}</span></div><div><button class="btn alt sm" data-ap="${i}" type="button">Remplacer la phrase</button></div>`:''}</article>`).join('');
+ R.innerHTML=`<div class="tiles"><div class="tile t-v"><b>${cnt.v}</b>Verified</div><div class="tile t-r"><b>${cnt.r}</b>Needs Review</div><div class="tile t-u"><b>${cnt.u}</b>Unsupported</div></div>
+ <div class="card"><h3 style="margin-bottom:10px">Texte annoté</h3><div class="ann">${html}</div>
+ <div class="row" style="margin-top:12px"><button class="btn" id="apall" type="button"${cnt.v===cl.length?' disabled':''}>Appliquer toutes les reformulations</button><span class="hint">Cliquez sur une zone colorée pour voir sa carte.</span></div></div>
+ ${cards}
+ <div class="card pub"><h3>Validation humaine avant publication</h3>
+ <p>Ce prototype vérifie seulement si les affirmations sont soutenues par les sources enregistrées. Il ne certifie rien.</p>
+ <label class="row" style="font-weight:500"><input type="checkbox" id="human" style="width:auto"> J’ai relu le texte et contrôlé les preuves des affirmations Needs Review.</label>
+ <div class="row" style="margin-top:12px"><button class="btn" id="pubb" type="button" disabled>Approuver pour publication</button><span class="hint" id="pubh"></span></div></div>`;
+ $$('mark').forEach(m=>{const go=()=>{const e=$('#cl'+m.dataset.c);e.scrollIntoView({behavior:'smooth',block:'center'});e.style.outline='3px solid var(--rose)';setTimeout(()=>e.style.outline='',1400)};m.onclick=go;m.onkeydown=e=>{if(e.key==='Enter')go()}});
+ $$('[data-ap]').forEach(b=>b.onclick=()=>{replace([cl[+b.dataset.ap]])});
+ const ap=$('#apall');if(ap)ap.onclick=()=>replace(cl.filter(c=>c.st!=='v'&&c.safe));
+ const sync=()=>{const ok=$('#human').checked&&!cnt.u;$('#pubb').disabled=!ok;$('#pubh').textContent=cnt.u?'Corrigez ou retirez les affirmations Unsupported pour continuer.':(ok?'':'Cochez la relecture humaine.')};
+ $('#human').onchange=sync;sync();
+ $('#pubb').onclick=()=>toast('Approuvé par vous. La publication reste manuelle.');
+}
+function replace(list){
+ let t=$('#v-text').value;const seen=new Set();
+ list.filter(c=>c.safe).sort((a,b)=>b.sStart-a.sStart).forEach(c=>{if(seen.has(c.sStart))return;seen.add(c.sStart);const seg=t.slice(c.sStart,c.sEnd),lead=seg.match(/^\s*/)[0],tail=(seg.match(/[.!?…]+\s*$/)||['.'])[0];t=t.slice(0,c.sStart)+lead+c.safe+tail+t.slice(c.sEnd)});
+ $('#v-text').value=t;run();toast('Reformulation appliquée et texte revérifié.');
+}
+
+loadForm();fillSelect();
+</script>
+</body>
+</html>
